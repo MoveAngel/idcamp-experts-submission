@@ -23,7 +23,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('addComment', () => {
-    it('should persist comment and return AddedComment correctly', async () => {
+    it('must save comment and return AddedComment properly', async () => {
       const newComment = { content: 'sebuah komentar', threadId: 'thread-123', owner: 'user-123' };
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
@@ -39,7 +39,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('deleteComment', () => {
-    it('should soft delete comment correctly', async () => {
+    it('should soft delete comment properly', async () => {
       await CommentsTableTestHelper.addComment({ id: 'comment-123', threadId: 'thread-123', owner: 'user-123' });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
 
@@ -51,7 +51,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('verifyCommentOwner', () => {
-    it('should not throw error when owner is correct', async () => {
+    it('ought not to throw error when owner is correct', async () => {
       await CommentsTableTestHelper.addComment({ id: 'comment-123', owner: 'user-123' });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
       await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-123')).resolves.not.toThrow();
@@ -65,7 +65,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('verifyCommentExists', () => {
-    it('should not throw error when comment exists', async () => {
+    it('ought not to throw error when comment exists', async () => {
       await CommentsTableTestHelper.addComment({ id: 'comment-123' });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
       await expect(commentRepositoryPostgres.verifyCommentExists('comment-123')).resolves.not.toThrow();
@@ -78,7 +78,7 @@ describe('CommentRepositoryPostgres', () => {
   });
 
   describe('getCommentsByThreadId', () => {
-    it('should return comments sorted by date ascending', async () => {
+    it('must yield comments sorted by date ascending', async () => {
       await CommentsTableTestHelper.addComment({ id: 'comment-1', threadId: 'thread-123', date: '2021-08-08T07:22:33.555Z' });
       await CommentsTableTestHelper.addComment({ id: 'comment-2', threadId: 'thread-123', date: '2021-08-08T08:00:00.000Z' });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');

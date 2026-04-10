@@ -4,7 +4,7 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ReplyRepository from '../../../Domains/replies/ReplyRepository.js';
 
 describe('GetThreadDetailUseCase', () => {
-  it('should orchestrate the get thread detail action correctly', async () => {
+  it('should orchestrate the get thread detail action properly', async () => {
     const threadId = 'thread-123';
 
     const mockThread = {
@@ -65,7 +65,7 @@ describe('GetThreadDetailUseCase', () => {
     expect(result.comments[0].replies[0].content).toBe('sebuah balasan');
   });
 
-  it('should mark deleted replies correctly', async () => {
+  it('should mark deleted replies properly', async () => {
     const threadId = 'thread-123';
 
     const mockThread = { id: threadId, title: 'thread', body: 'body', date: '2021-08-08', username: 'user' };

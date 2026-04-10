@@ -2,7 +2,7 @@ import ClientError from '../ClientError.js';
 import AuthorizationError from '../AuthorizationError.js';
 
 describe('AuthorizationError', () => {
-  it('should create AuthorizationError correctly', () => {
+  it('must instantiate AuthorizationError properly', () => {
     const authenticationError = new AuthorizationError('authorization error!');
 
     expect(authenticationError).toBeInstanceOf(AuthorizationError);

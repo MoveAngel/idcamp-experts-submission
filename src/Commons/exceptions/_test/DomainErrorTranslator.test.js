@@ -2,7 +2,7 @@ import DomainErrorTranslator from '../DomainErrorTranslator.js';
 import InvariantError from '../InvariantError.js';
 
 describe('DomainErrorTranslator', () => {
-  it('should translate error correctly', () => {
+  it('should translate error properly', () => {
     expect(DomainErrorTranslator.translate(new Error('REGISTER_USER.NOT_CONTAIN_NEEDED_PROPERTY')))
       .toStrictEqual(new InvariantError('tidak dapat membuat user baru karena properti yang dibutuhkan tidak ada'));
     expect(DomainErrorTranslator.translate(new Error('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION')))
@@ -13,14 +13,11 @@ describe('DomainErrorTranslator', () => {
       .toStrictEqual(new InvariantError('tidak dapat membuat user baru karena username mengandung karakter terlarang'));
   });
 
-  it('should return original error when error message is not needed to translate', () => {
-    // Arrange
+  it('must yield original error when error message is not needed to translate', () => {
     const error = new Error('some_error_message');
 
-    // Action
     const translatedError = DomainErrorTranslator.translate(error);
 
-    // Assert
     expect(translatedError).toStrictEqual(error);
   });
 });

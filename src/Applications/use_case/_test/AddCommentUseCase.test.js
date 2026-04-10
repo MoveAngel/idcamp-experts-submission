@@ -4,13 +4,13 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('AddCommentUseCase', () => {
-  it('should orchestrate the add comment action correctly', async () => {
-    const useCasePayload = { content: 'sebuah comment', threadId: 'thread-123', owner: 'user-123' };
+  it('should orchestrate the add comment action properly', async () => {
+    const reqPayload = { content: 'sebuah comment', threadId: 'thread-123', owner: 'user-123' };
 
     const expectedAddedComment = new AddedComment({
       id: 'comment-123',
-      content: useCasePayload.content,
-      owner: useCasePayload.owner,
+      content: reqPayload.content,
+      owner: reqPayload.owner,
     });
 
     const mockCommentRepository = new CommentRepository();
@@ -24,12 +24,12 @@ describe('AddCommentUseCase', () => {
       threadRepository: mockThreadRepository,
     });
 
-    const addedComment = await addCommentUseCase.execute(useCasePayload);
+    const addedComment = await addCommentUseCase.execute(reqPayload);
 
     expect(addedComment).toStrictEqual(expectedAddedComment);
-    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(useCasePayload.threadId);
+    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
     expect(mockCommentRepository.addComment).toBeCalledWith(
-      expect.objectContaining({ content: useCasePayload.content, threadId: useCasePayload.threadId, owner: useCasePayload.owner }),
+      expect.objectContaining({ content: reqPayload.content, threadId: reqPayload.threadId, owner: reqPayload.owner }),
     );
   });
 });

@@ -4,17 +4,17 @@ import LogoutUserUseCase from '../../../../Applications/use_case/LogoutUserUseCa
 
 class AuthenticationsHandler {
   constructor(container) {
-    this._container = container;
+    this._serviceContainer = container;
 
-    this.postAuthenticationHandler = this.postAuthenticationHandler.bind(this);
-    this.putAuthenticationHandler = this.putAuthenticationHandler.bind(this);
-    this.deleteAuthenticationHandler = this.deleteAuthenticationHandler.bind(this);
+    this.loginHandler = this.loginHandler.bind(this);
+    this.refreshAuthHandler = this.refreshAuthHandler.bind(this);
+    this.logoutHandler = this.logoutHandler.bind(this);
   }
 
-  async postAuthenticationHandler(req, res, next) {
+  async loginHandler(req, res, next) {
     try {
-      const loginUserUseCase = this._container.getInstance(LoginUserUseCase.name);
-      const { accessToken, refreshToken } = await loginUserUseCase.execute(req.body);
+      const act = this._serviceContainer.getInstance(LoginUserUseCase.name);
+      const { accessToken, refreshToken } = await act.execute(req.body);
 
       res.status(201).json({
         status: 'success',
@@ -28,11 +28,11 @@ class AuthenticationsHandler {
     }
   }
 
-  async putAuthenticationHandler(req, res, next) {
+  async refreshAuthHandler(req, res, next) {
     try {
-      const refreshAuthenticationUseCase = this._container
+      const act = this._serviceContainer
         .getInstance(RefreshAuthenticationUseCase.name);
-      const accessToken = await refreshAuthenticationUseCase.execute(req.body);
+      const accessToken = await act.execute(req.body);
 
       res.json({
         status: 'success',
@@ -45,10 +45,10 @@ class AuthenticationsHandler {
     }
   }
 
-  async deleteAuthenticationHandler(req, res, next) {
+  async logoutHandler(req, res, next) {
     try {
-      const logoutUserUseCase = this._container.getInstance(LogoutUserUseCase.name);
-      await logoutUserUseCase.execute(req.body);
+      const act = this._serviceContainer.getInstance(LogoutUserUseCase.name);
+      await act.execute(req.body);
 
       res.json({
         status: 'success',

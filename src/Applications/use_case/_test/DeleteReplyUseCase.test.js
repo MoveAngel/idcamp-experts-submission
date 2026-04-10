@@ -4,8 +4,8 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('DeleteReplyUseCase', () => {
-  it('should orchestrate the delete reply action correctly', async () => {
-    const useCasePayload = { threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123', owner: 'user-123' };
+  it('should orchestrate the delete reply action properly', async () => {
+    const reqPayload = { threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123', owner: 'user-123' };
 
     const mockReplyRepository = new ReplyRepository();
     const mockCommentRepository = new CommentRepository();
@@ -23,12 +23,12 @@ describe('DeleteReplyUseCase', () => {
       threadRepository: mockThreadRepository,
     });
 
-    await deleteReplyUseCase.execute(useCasePayload);
+    await deleteReplyUseCase.execute(reqPayload);
 
-    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(useCasePayload.threadId);
-    expect(mockCommentRepository.verifyCommentExists).toBeCalledWith(useCasePayload.commentId);
-    expect(mockReplyRepository.verifyReplyExists).toBeCalledWith(useCasePayload.replyId);
-    expect(mockReplyRepository.verifyReplyOwner).toBeCalledWith(useCasePayload.replyId, useCasePayload.owner);
-    expect(mockReplyRepository.deleteReply).toBeCalledWith(useCasePayload.replyId);
+    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
+    expect(mockCommentRepository.verifyCommentExists).toBeCalledWith(reqPayload.commentId);
+    expect(mockReplyRepository.verifyReplyExists).toBeCalledWith(reqPayload.replyId);
+    expect(mockReplyRepository.verifyReplyOwner).toBeCalledWith(reqPayload.replyId, reqPayload.owner);
+    expect(mockReplyRepository.deleteReply).toBeCalledWith(reqPayload.replyId);
   });
 });

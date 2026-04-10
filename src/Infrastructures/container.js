@@ -1,20 +1,15 @@
-/* istanbul ignore file */
-
 import { createContainer } from 'instances-container';
 
-// external agency
 import { nanoid } from 'nanoid';
 import bcrypt from 'bcrypt';
 import pool from './database/postgres/pool.js';
 import jwt from 'jsonwebtoken';
 
-// service (repository, helper, manager, etc)
 import UserRepository from '../Domains/users/UserRepository.js';
 import PasswordHash from '../Applications/security/PasswordHash.js';
 import UserRepositoryPostgres from './repository/UserRepositoryPostgres.js';
 import BcryptPasswordHash from './security/BcryptPasswordHash.js';
 
-// thread, comment, reply domains & repos
 import ThreadRepository from '../Domains/threads/ThreadRepository.js';
 import ThreadRepositoryPostgres from './repository/ThreadRepositoryPostgres.js';
 import CommentRepository from '../Domains/comments/CommentRepository.js';
@@ -22,7 +17,6 @@ import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres.js
 import ReplyRepository from '../Domains/replies/ReplyRepository.js';
 import ReplyRepositoryPostgres from './repository/ReplyRepositoryPostgres.js';
 
-// use case
 import AddUserUseCase from '../Applications/use_case/AddUserUseCase.js';
 import AuthenticationTokenManager from '../Applications/security/AuthenticationTokenManager.js';
 import JwtTokenManager from './security/JwtTokenManager.js';
@@ -38,10 +32,8 @@ import GetThreadDetailUseCase from '../Applications/use_case/GetThreadDetailUseC
 import AddReplyUseCase from '../Applications/use_case/AddReplyUseCase.js';
 import DeleteReplyUseCase from '../Applications/use_case/DeleteReplyUseCase.js';
 
-// creating container
 const container = createContainer();
 
-// registering services and repository
 container.register([
   {
     key: UserRepository.name,
@@ -122,7 +114,6 @@ container.register([
   },
 ]);
 
-// registering use cases
 container.register([
   {
     key: AddUserUseCase.name,

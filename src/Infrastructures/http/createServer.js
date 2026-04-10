@@ -9,43 +9,38 @@ import authMiddleware from './authMiddleware.js';
 const createServer = async (container) => {
   const app = express();
 
-  // Middleware for parsing JSON
   app.use(express.json());
 
-  // Public routes (no auth required)
   app.use('/users', users(container));
   app.use('/authentications', authentications(container));
 
-  // Thread routes: GET /:threadId is public, everything else requires auth
-  const handler = threadsHandler(container);
+  const threadAct = threadsHandler(container);
 
-  app.get('/threads/:threadId', handler.getThreadDetail);
+  app.get('/threads/:threadId', threadAct.getThreadDetail);
 
-  app.post('/threads', authMiddleware, handler.postThread);
-  app.post('/threads/:threadId/comments', authMiddleware, handler.postComment);
-  app.delete('/threads/:threadId/comments/:commentId', authMiddleware, handler.deleteComment);
-  app.post('/threads/:threadId/comments/:commentId/replies', authMiddleware, handler.postReply);
-  app.delete('/threads/:threadId/comments/:commentId/replies/:replyId', authMiddleware, handler.deleteReply);
+  app.post('/threads', authMiddleware, threadAct.postThread);
+  app.post('/threads/:threadId/comments', authMiddleware, threadAct.postComment);
+  app.delete('/threads/:threadId/comments/:commentId', authMiddleware, threadAct.deleteComment);
+  app.post('/threads/:threadId/comments/:commentId/replies', authMiddleware, threadAct.postReply);
+  app.delete('/threads/:threadId/comments/:commentId/replies/:replyId', authMiddleware, threadAct.deleteReply);
 
-  // Global error handler
-  app.use((error, req, res, next) => {
-    const translatedError = DomainErrorTranslator.translate(error);
+  app.use((err, req, res, next) => {
+    const customException = DomainErrorTranslator.translate(err);
 
-    if (translatedError instanceof ClientError) {
-      return res.status(translatedError.statusCode).json({
+    if (customException instanceof ClientError) {
+      return res.status(customException.statusCode).json({
         status: 'fail',
-        message: translatedError.message,
+        message: customException.message,
       });
     }
 
-    console.error(error);
+    console.error(err);
     return res.status(500).json({
       status: 'error',
-      message: 'terjadi kegagalan pada server kami',
+      message: 'Terjadi kegagalan pada server',
     });
   });
 
-  // 404 handler
   app.use((req, res) => {
     res.status(404).json({
       status: 'fail',

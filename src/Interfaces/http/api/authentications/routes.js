@@ -3,9 +3,9 @@ import express from 'express';
 const createAuthenticationsRouter = (handler) => {
   const router = express.Router();
 
-  router.post('/', handler.postAuthenticationHandler);
-  router.put('/', handler.putAuthenticationHandler);
-  router.delete('/', handler.deleteAuthenticationHandler);
+  router.post('/', handler.loginHandler);
+  router.put('/', handler.refreshAuthHandler);
+  router.delete('/', handler.logoutHandler);
 
   return router;
 };

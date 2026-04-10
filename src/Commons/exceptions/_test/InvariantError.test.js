@@ -2,7 +2,7 @@ import ClientError from '../ClientError.js';
 import InvariantError from '../InvariantError.js';
 
 describe('InvariantError', () => {
-  it('should create an error correctly', () => {
+  it('must instantiate an error properly', () => {
     const invariantError = new InvariantError('an error occurs');
 
     expect(invariantError).toBeInstanceOf(InvariantError);

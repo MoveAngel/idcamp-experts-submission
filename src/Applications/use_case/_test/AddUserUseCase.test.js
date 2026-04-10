@@ -6,12 +6,8 @@ import PasswordHash from '../../security/PasswordHash.js';
 import AddUserUseCase from '../AddUserUseCase.js';
 
 describe('AddUserUseCase', () => {
-  /**
-   * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
-   */
-  it('should orchestrating the add user action correctly', async () => {
-    // Arrange
-    const useCasePayload = {
+  it('should orchestrating the add user action properly', async () => {
+    const reqPayload = {
       username: 'dicoding',
       password: 'secret',
       fullname: 'Dicoding Indonesia',
@@ -19,44 +15,39 @@ describe('AddUserUseCase', () => {
 
     const mockRegisteredUser = new RegisteredUser({
       id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
+      username: reqPayload.username,
+      fullname: reqPayload.fullname,
     });
 
-    /** creating dependency of use case */
     const mockUserRepository = new UserRepository();
     const mockPasswordHash = new PasswordHash();
 
-    /** mocking needed function */
-    mockUserRepository.verifyAvailableUsername = vi.fn()
+    mockUserRepository.checkUsernameIsAvailable = vi.fn()
       .mockImplementation(() => Promise.resolve());
     mockPasswordHash.hash = vi.fn()
       .mockImplementation(() => Promise.resolve('encrypted_password'));
     mockUserRepository.addUser = vi.fn()
       .mockImplementation(() => Promise.resolve(mockRegisteredUser));
 
-    /** creating use case instance */
     const getUserUseCase = new AddUserUseCase({
       userRepository: mockUserRepository,
       passwordHash: mockPasswordHash,
     });
 
-    // Action
-    const registeredUser = await getUserUseCase.execute(useCasePayload);
+    const registeredUser = await getUserUseCase.execute(reqPayload);
 
-    // Assert
     expect(registeredUser).toStrictEqual(new RegisteredUser({
       id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
+      username: reqPayload.username,
+      fullname: reqPayload.fullname,
     }));
 
-    expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith(useCasePayload.username);
-    expect(mockPasswordHash.hash).toBeCalledWith(useCasePayload.password);
+    expect(mockUserRepository.checkUsernameIsAvailable).toBeCalledWith(reqPayload.username);
+    expect(mockPasswordHash.hash).toBeCalledWith(reqPayload.password);
     expect(mockUserRepository.addUser).toBeCalledWith(new RegisterUser({
-      username: useCasePayload.username,
+      username: reqPayload.username,
       password: 'encrypted_password',
-      fullname: useCasePayload.fullname,
+      fullname: reqPayload.fullname,
     }));
   });
 });

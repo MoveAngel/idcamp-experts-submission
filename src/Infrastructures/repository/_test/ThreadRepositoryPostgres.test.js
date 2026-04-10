@@ -19,7 +19,7 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('addThread', () => {
-    it('should persist thread and return AddedThread correctly', async () => {
+    it('must save thread and return AddedThread properly', async () => {
       const newThread = { title: 'sebuah thread', body: 'sebuah body thread', owner: 'user-123' };
       const fakeIdGenerator = () => '123';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
@@ -35,7 +35,7 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('getThreadById', () => {
-    it('should return thread detail correctly', async () => {
+    it('must yield thread detail properly', async () => {
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, () => '123');
 
@@ -52,7 +52,7 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('verifyThreadExists', () => {
-    it('should not throw error when thread exists', async () => {
+    it('ought not to throw error when thread exists', async () => {
       await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, () => '123');
       await expect(threadRepositoryPostgres.verifyThreadExists('thread-123')).resolves.not.toThrow();

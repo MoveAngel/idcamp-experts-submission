@@ -28,12 +28,12 @@ describe('HTTP server', () => {
     expect(response.status).toEqual(404);
   });
 
-  it('should handle server error correctly', async () => {
+  it('should handle server error properly', async () => {
     const app = await createServer({});
     const response = await request(app).post('/users').send({ username: 'dicoding', fullname: 'Dicoding Indonesia', password: 'super_secret' });
     expect(response.status).toEqual(500);
     expect(response.body.status).toEqual('error');
-    expect(response.body.message).toEqual('terjadi kegagalan pada server kami');
+    expect(response.body.message).toEqual('Terjadi kegagalan pada server');
   });
 
   const registerAndLogin = async (app, username = 'dicoding') => {
@@ -128,7 +128,7 @@ describe('HTTP server', () => {
   });
 
   describe('when PUT /authentications', () => {
-    it('should return 200 and new access token', async () => {
+    it('must yield 200 and new access token', async () => {
       const app = await createServer(container);
       await request(app).post('/users').send({ username: 'dicoding', password: 'secret', fullname: 'Dicoding Indonesia' });
       const loginResponse = await request(app).post('/authentications').send({ username: 'dicoding', password: 'secret' });
@@ -138,28 +138,28 @@ describe('HTTP server', () => {
       expect(response.body.data.accessToken).toBeDefined();
     });
 
-    it('should return 400 payload not contain refresh token', async () => {
+    it('must yield 400 payload not contain refresh token', async () => {
       const app = await createServer(container);
       const response = await request(app).put('/authentications').send({});
       expect(response.status).toEqual(400);
       expect(response.body.message).toEqual('harus mengirimkan token refresh');
     });
 
-    it('should return 400 if refresh token not string', async () => {
+    it('must yield 400 if refresh token not string', async () => {
       const app = await createServer(container);
       const response = await request(app).put('/authentications').send({ refreshToken: 123 });
       expect(response.status).toEqual(400);
       expect(response.body.message).toEqual('refresh token harus string');
     });
 
-    it('should return 400 if refresh token not valid', async () => {
+    it('must yield 400 if refresh token not valid', async () => {
       const app = await createServer(container);
       const response = await request(app).put('/authentications').send({ refreshToken: 'invalid_refresh_token' });
       expect(response.status).toEqual(400);
       expect(response.body.message).toEqual('refresh token tidak valid');
     });
 
-    it('should return 400 if refresh token not registered in database', async () => {
+    it('must yield 400 if refresh token not registered in database', async () => {
       const app = await createServer(container);
       const refreshToken = await container.getInstance(AuthenticationTokenManager.name).createRefreshToken({ username: 'dicoding' });
       const response = await request(app).put('/authentications').send({ refreshToken });
@@ -193,7 +193,6 @@ describe('HTTP server', () => {
     });
   });
 
-  // ===== THREAD ENDPOINTS =====
   describe('when POST /threads', () => {
     it('should response 201 and added thread', async () => {
       const app = await createServer(container);

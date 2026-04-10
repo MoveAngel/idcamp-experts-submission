@@ -1,13 +1,13 @@
 class NewComment {
   constructor({ content, threadId, owner }) {
-    this._verifyPayload({ content, threadId, owner });
+    this._verifyData({ content, threadId, owner });
 
     this.content = content;
     this.threadId = threadId;
     this.owner = owner;
   }
 
-  _verifyPayload({ content, threadId, owner }) {
+  _verifyData({ content, threadId, owner }) {
     if (!content || !threadId || !owner) {
       throw new Error('NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }

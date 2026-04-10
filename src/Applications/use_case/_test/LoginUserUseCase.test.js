@@ -7,9 +7,8 @@ import NewAuth from '../../../Domains/authentications/entities/NewAuth.js';
 import { vi } from 'vitest';
 
 describe('GetAuthenticationUseCase', () => {
-  it('should orchestrating the get authentication action correctly', async () => {
-    // Arrange
-    const useCasePayload = {
+  it('should orchestrating the get authentication action properly', async () => {
+    const reqPayload = {
       username: 'dicoding',
       password: 'secret',
     };
@@ -22,7 +21,6 @@ describe('GetAuthenticationUseCase', () => {
     const mockAuthenticationTokenManager = new AuthenticationTokenManager();
     const mockPasswordHash = new PasswordHash();
 
-    // Mocking
     mockUserRepository.getPasswordByUsername = vi.fn()
       .mockImplementation(() => Promise.resolve('encrypted_password'));
     mockPasswordHash.comparePassword = vi.fn()
@@ -36,7 +34,6 @@ describe('GetAuthenticationUseCase', () => {
     mockAuthenticationRepository.addToken = vi.fn()
       .mockImplementation(() => Promise.resolve());
 
-    // create use case instance
     const loginUserUseCase = new LoginUserUseCase({
       userRepository: mockUserRepository,
       authenticationRepository: mockAuthenticationRepository,
@@ -44,10 +41,8 @@ describe('GetAuthenticationUseCase', () => {
       passwordHash: mockPasswordHash,
     });
 
-    // Action
-    const actualAuthentication = await loginUserUseCase.execute(useCasePayload);
+    const actualAuthentication = await loginUserUseCase.execute(reqPayload);
 
-    // Assert
     expect(actualAuthentication).toEqual(new NewAuth({
       accessToken: 'access_token',
       refreshToken: 'refresh_token',

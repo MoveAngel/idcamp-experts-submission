@@ -7,9 +7,9 @@ class RefreshAuthenticationUseCase {
     this._authenticationTokenManager = authenticationTokenManager;
   }
 
-  async execute(useCasePayload) {
-    this._verifyPayload(useCasePayload);
-    const { refreshToken } = useCasePayload;
+  async execute(reqPayload) {
+    this._verifyData(reqPayload);
+    const { refreshToken } = reqPayload;
 
     await this._authenticationTokenManager.verifyRefreshToken(refreshToken);
     await this._authenticationRepository.checkAvailabilityToken(refreshToken);
@@ -19,7 +19,7 @@ class RefreshAuthenticationUseCase {
     return this._authenticationTokenManager.createAccessToken({ username, id });
   }
 
-  _verifyPayload(payload) {
+  _verifyData(payload) {
     const { refreshToken } = payload;
 
     if (!refreshToken) {

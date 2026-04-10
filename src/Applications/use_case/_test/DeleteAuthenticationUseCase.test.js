@@ -4,32 +4,27 @@ import { vi } from 'vitest';
 
 describe('DeleteAuthenticationUseCase', () => {
   it('should throw error if use case payload not contain refresh token', async () => {
-    // Arrange
-    const useCasePayload = {};
+    const reqPayload = {};
     const deleteAuthenticationUseCase = new DeleteAuthenticationUseCase({});
 
-    // Action & Assert
-    await expect(deleteAuthenticationUseCase.execute(useCasePayload))
+    await expect(deleteAuthenticationUseCase.execute(reqPayload))
       .rejects
       .toThrowError('DELETE_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN');
   });
 
   it('should throw error if refresh token not string', async () => {
-    // Arrange
-    const useCasePayload = {
+    const reqPayload = {
       refreshToken: 123,
     };
     const deleteAuthenticationUseCase = new DeleteAuthenticationUseCase({});
 
-    // Action & Assert
-    await expect(deleteAuthenticationUseCase.execute(useCasePayload))
+    await expect(deleteAuthenticationUseCase.execute(reqPayload))
       .rejects
       .toThrowError('DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should orchestrating the delete authentication action correctly', async () => {
-    // Arrange
-    const useCasePayload = {
+  it('should orchestrating the delete authentication action properly', async () => {
+    const reqPayload = {
       refreshToken: 'refreshToken',
     };
     const mockAuthenticationRepository = new AuthenticationRepository();
@@ -42,13 +37,11 @@ describe('DeleteAuthenticationUseCase', () => {
       authenticationRepository: mockAuthenticationRepository,
     });
 
-    // Act
-    await deleteAuthenticationUseCase.execute(useCasePayload);
+    await deleteAuthenticationUseCase.execute(reqPayload);
 
-    // Assert
     expect(mockAuthenticationRepository.checkAvailabilityToken)
-      .toHaveBeenCalledWith(useCasePayload.refreshToken);
+      .toHaveBeenCalledWith(reqPayload.refreshToken);
     expect(mockAuthenticationRepository.deleteToken)
-      .toHaveBeenCalledWith(useCasePayload.refreshToken);
+      .toHaveBeenCalledWith(reqPayload.refreshToken);
   });
 });

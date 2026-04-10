@@ -1,13 +1,13 @@
 class AddedReply {
   constructor({ id, content, owner }) {
-    this._verifyPayload({ id, content, owner });
+    this._verifyData({ id, content, owner });
 
     this.id = id;
     this.content = content;
     this.owner = owner;
   }
 
-  _verifyPayload({ id, content, owner }) {
+  _verifyData({ id, content, owner }) {
     if (!id || !content || !owner) {
       throw new Error('ADDED_REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }

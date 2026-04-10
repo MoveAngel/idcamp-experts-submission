@@ -26,7 +26,7 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('addReply', () => {
-    it('should persist reply and return AddedReply correctly', async () => {
+    it('must save reply and return AddedReply properly', async () => {
       const newReply = { content: 'sebuah balasan', commentId: 'comment-123', owner: 'user-123' };
       const fakeIdGenerator = () => '123';
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
@@ -42,7 +42,7 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('deleteReply', () => {
-    it('should soft delete reply correctly', async () => {
+    it('should soft delete reply properly', async () => {
       await RepliesTableTestHelper.addReply({ id: 'reply-123', commentId: 'comment-123', owner: 'user-123' });
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, () => '123');
 
@@ -54,7 +54,7 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('verifyReplyOwner', () => {
-    it('should not throw error when owner is correct', async () => {
+    it('ought not to throw error when owner is correct', async () => {
       await RepliesTableTestHelper.addReply({ id: 'reply-123', owner: 'user-123' });
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, () => '123');
       await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', 'user-123')).resolves.not.toThrow();
@@ -68,7 +68,7 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('verifyReplyExists', () => {
-    it('should not throw error when reply exists', async () => {
+    it('ought not to throw error when reply exists', async () => {
       await RepliesTableTestHelper.addReply({ id: 'reply-123' });
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, () => '123');
       await expect(replyRepositoryPostgres.verifyReplyExists('reply-123')).resolves.not.toThrow();
@@ -81,7 +81,7 @@ describe('ReplyRepositoryPostgres', () => {
   });
 
   describe('getRepliesByCommentId', () => {
-    it('should return replies sorted by date ascending', async () => {
+    it('must yield replies sorted by date ascending', async () => {
       await RepliesTableTestHelper.addReply({ id: 'reply-1', commentId: 'comment-123', date: '2021-08-08T07:59:18.982Z' });
       await RepliesTableTestHelper.addReply({ id: 'reply-2', commentId: 'comment-123', date: '2021-08-08T08:00:00.000Z' });
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, () => '123');

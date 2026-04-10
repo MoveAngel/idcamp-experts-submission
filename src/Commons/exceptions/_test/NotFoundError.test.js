@@ -2,7 +2,7 @@ import NotFoundError from '../NotFoundError.js';
 import ClientError from '../ClientError.js';
 
 describe('NotFoundError', () => {
-  it('should create error correctly', () => {
+  it('must instantiate error properly', () => {
     const notFoundError = new NotFoundError('not found!');
 
     expect(notFoundError).toBeInstanceOf(NotFoundError);
