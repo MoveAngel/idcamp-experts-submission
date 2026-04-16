@@ -58,11 +58,51 @@ describe('GetThreadDetailUseCase', () => {
 
     const result = await getThreadDetailUseCase.execute(threadId);
 
+    const expectedThread = {
+      id: 'thread-123',
+      title: 'sebuah thread',
+      body: 'sebuah body thread',
+      date: '2021-08-08T07:19:09.775Z',
+      username: 'dicoding',
+      comments: [
+        {
+          id: 'comment-_pby2_tmXV6bcvcdev8xk',
+          username: 'johndoe',
+          date: '2021-08-08T07:22:33.555Z',
+          content: 'sebuah comment',
+          is_delete: false,
+          replies: [
+            {
+              id: 'reply-BErOXUSefjwWGW1z101hk',
+              content: 'sebuah balasan',
+              date: '2021-08-08T07:59:48.766Z',
+              username: 'johndoe',
+              is_delete: false,
+            },
+          ],
+        },
+        {
+          id: 'comment-_pby2_tmXV6bcvcdev9xk',
+          username: 'dicoding',
+          date: '2021-08-08T07:26:21.338Z',
+          content: '**komentar telah dihapus**',
+          is_delete: true,
+          replies: [
+            {
+              id: 'reply-BErOXUSefjwWGW1z101hk',
+              content: 'sebuah balasan',
+              date: '2021-08-08T07:59:48.766Z',
+              username: 'johndoe',
+              is_delete: false,
+            },
+          ],
+        },
+      ],
+    };
+
     expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
     expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(threadId);
-    expect(result.comments[0].content).toBe('sebuah comment');
-    expect(result.comments[1].content).toBe('**komentar telah dihapus**');
-    expect(result.comments[0].replies[0].content).toBe('sebuah balasan');
+    expect(result).toStrictEqual(expectedThread);
   });
 
   it('should mark deleted replies properly', async () => {

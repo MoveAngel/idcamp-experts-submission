@@ -3,7 +3,9 @@ import ClientError from '../../Commons/exceptions/ClientError.js';
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator.js';
 import users from '../../Interfaces/http/api/users/index.js';
 import authentications from '../../Interfaces/http/api/authentications/index.js';
-import threadsHandler from '../../Interfaces/http/api/threads/handler.js';
+import threads from '../../Interfaces/http/api/threads/index.js';
+import comments from '../../Interfaces/http/api/comments/index.js';
+import replies from '../../Interfaces/http/api/replies/index.js';
 import authMiddleware from './authMiddleware.js';
 
 const createServer = async (container) => {
@@ -14,15 +16,13 @@ const createServer = async (container) => {
   app.use('/users', users(container));
   app.use('/authentications', authentications(container));
 
-  const threadAct = threadsHandler(container);
+  const threadsRouter = threads(container, authMiddleware);
+  const commentsRouter = comments(container);
+  const repliesRouter = replies(container);
 
-  app.get('/threads/:threadId', threadAct.getThreadDetail);
-
-  app.post('/threads', authMiddleware, threadAct.postThread);
-  app.post('/threads/:threadId/comments', authMiddleware, threadAct.postComment);
-  app.delete('/threads/:threadId/comments/:commentId', authMiddleware, threadAct.deleteComment);
-  app.post('/threads/:threadId/comments/:commentId/replies', authMiddleware, threadAct.postReply);
-  app.delete('/threads/:threadId/comments/:commentId/replies/:replyId', authMiddleware, threadAct.deleteReply);
+  app.use('/threads', threadsRouter);
+  app.use('/threads/:threadId/comments', authMiddleware, commentsRouter);
+  app.use('/threads/:threadId/comments/:commentId/replies', authMiddleware, repliesRouter);
 
   app.use((err, req, res, next) => {
     const customException = DomainErrorTranslator.translate(err);

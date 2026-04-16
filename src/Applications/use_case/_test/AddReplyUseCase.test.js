@@ -10,8 +10,8 @@ describe('AddReplyUseCase', () => {
 
     const expectedAddedReply = new AddedReply({
       id: 'reply-123',
-      content: reqPayload.content,
-      owner: reqPayload.owner,
+      content: 'sebuah balasan',
+      owner: 'user-123',
     });
 
     const mockReplyRepository = new ReplyRepository();
@@ -20,7 +20,9 @@ describe('AddReplyUseCase', () => {
 
     mockThreadRepository.verifyThreadExists = vi.fn().mockResolvedValue();
     mockCommentRepository.verifyCommentExists = vi.fn().mockResolvedValue();
-    mockReplyRepository.addReply = vi.fn().mockResolvedValue(expectedAddedReply);
+    mockReplyRepository.addReply = vi.fn().mockResolvedValue(
+      new AddedReply({ id: 'reply-123', content: 'sebuah balasan', owner: 'user-123' }),
+    );
 
     const addReplyUseCase = new AddReplyUseCase({
       replyRepository: mockReplyRepository,

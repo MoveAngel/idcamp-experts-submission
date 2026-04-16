@@ -8,12 +8,14 @@ describe('AddThreadUseCase', () => {
 
     const expectedAddedThread = new AddedThread({
       id: 'thread-123',
-      title: reqPayload.title,
-      owner: reqPayload.owner,
+      title: 'Judul Thread',
+      owner: 'user-123',
     });
 
     const mockThreadRepository = new ThreadRepository();
-    mockThreadRepository.addThread = vi.fn().mockResolvedValue(expectedAddedThread);
+    mockThreadRepository.addThread = vi.fn().mockResolvedValue(
+      new AddedThread({ id: 'thread-123', title: 'Judul Thread', owner: 'user-123' }),
+    );
 
     const addThreadUseCase = new AddThreadUseCase({ threadRepository: mockThreadRepository });
     const addedThread = await addThreadUseCase.execute(reqPayload);

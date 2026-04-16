@@ -9,15 +9,17 @@ describe('AddCommentUseCase', () => {
 
     const expectedAddedComment = new AddedComment({
       id: 'comment-123',
-      content: reqPayload.content,
-      owner: reqPayload.owner,
+      content: 'sebuah comment',
+      owner: 'user-123',
     });
 
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
     mockThreadRepository.verifyThreadExists = vi.fn().mockResolvedValue();
-    mockCommentRepository.addComment = vi.fn().mockResolvedValue(expectedAddedComment);
+    mockCommentRepository.addComment = vi.fn().mockResolvedValue(
+      new AddedComment({ id: 'comment-123', content: 'sebuah comment', owner: 'user-123' }),
+    );
 
     const addCommentUseCase = new AddCommentUseCase({
       commentRepository: mockCommentRepository,
