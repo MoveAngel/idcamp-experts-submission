@@ -1,7 +1,7 @@
-import commentsHandler from './handler.js';
-import createCommentsRouter from './routes.js';
+import buildCommentsHandler from './handler.js';
+import buildCommentsRouter from './routes.js';
 
 export default (container) => {
-  const handler = commentsHandler(container);
-  return createCommentsRouter(handler);
+  const handler = buildCommentsHandler(container);
+  return buildCommentsRouter(handler);
 };

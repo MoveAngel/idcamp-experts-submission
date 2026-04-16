@@ -44,6 +44,14 @@ forum-api/
 │   │       │   ├── handler.js
 │   │       │   ├── routes.js
 │   │       │   └── index.js
+│   │       ├── comments/
+│   │       │   ├── handler.js
+│   │       │   ├── routes.js
+│   │       │   └── index.js
+│   │       ├── replies/
+│   │       │   ├── handler.js
+│   │       │   ├── routes.js
+│   │       │   └── index.js
 │   │       ├── users/
 │   │       └── authentications/
 │   │

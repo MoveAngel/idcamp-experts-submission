@@ -1,6 +1,6 @@
 import express from 'express';
 
-const createRepliesRouter = (handler) => {
+const buildRepliesRouter = (handler) => {
   const router = express.Router({ mergeParams: true });
 
   router.post('/', handler.postReply);
@@ -9,4 +9,4 @@ const createRepliesRouter = (handler) => {
   return router;
 };
 
-export default createRepliesRouter;
+export default buildRepliesRouter;

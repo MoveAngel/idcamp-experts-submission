@@ -5,38 +5,38 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('AddReplyUseCase', () => {
-  it('should orchestrate the add reply action properly', async () => {
-    const reqPayload = { content: 'sebuah balasan', commentId: 'comment-123', threadId: 'thread-123', owner: 'user-123' };
+  it('should handle the add reply process correctly', async () => {
+    const inputData = { content: 'balasan dari pengguna', commentId: 'comment-abc', threadId: 'thread-abc', owner: 'user-xyz' };
 
-    const expectedAddedReply = new AddedReply({
-      id: 'reply-123',
-      content: 'sebuah balasan',
-      owner: 'user-123',
-    });
+    const replyRepositoryStub = new ReplyRepository();
+    const commentRepositoryStub = new CommentRepository();
+    const threadRepositoryStub = new ThreadRepository();
 
-    const mockReplyRepository = new ReplyRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockThreadRepository = new ThreadRepository();
-
-    mockThreadRepository.verifyThreadExists = vi.fn().mockResolvedValue();
-    mockCommentRepository.verifyCommentExists = vi.fn().mockResolvedValue();
-    mockReplyRepository.addReply = vi.fn().mockResolvedValue(
-      new AddedReply({ id: 'reply-123', content: 'sebuah balasan', owner: 'user-123' }),
+    threadRepositoryStub.verifyThreadExists = vi.fn().mockResolvedValue();
+    commentRepositoryStub.verifyCommentExists = vi.fn().mockResolvedValue();
+    replyRepositoryStub.addReply = vi.fn().mockResolvedValue(
+      new AddedReply({ id: 'reply-xyz', content: 'balasan dari pengguna', owner: 'user-xyz' }),
     );
 
-    const addReplyUseCase = new AddReplyUseCase({
-      replyRepository: mockReplyRepository,
-      commentRepository: mockCommentRepository,
-      threadRepository: mockThreadRepository,
+    const useCase = new AddReplyUseCase({
+      replyRepository: replyRepositoryStub,
+      commentRepository: commentRepositoryStub,
+      threadRepository: threadRepositoryStub,
     });
 
-    const addedReply = await addReplyUseCase.execute(reqPayload);
+    const result = await useCase.execute(inputData);
 
-    expect(addedReply).toStrictEqual(expectedAddedReply);
-    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
-    expect(mockCommentRepository.verifyCommentExists).toBeCalledWith(reqPayload.commentId);
-    expect(mockReplyRepository.addReply).toBeCalledWith(
-      expect.objectContaining({ content: reqPayload.content, commentId: reqPayload.commentId, owner: reqPayload.owner }),
+    const replySnapshot = new AddedReply({
+      id: 'reply-xyz',
+      content: 'balasan dari pengguna',
+      owner: 'user-xyz',
+    });
+
+    expect(result).toStrictEqual(replySnapshot);
+    expect(threadRepositoryStub.verifyThreadExists).toBeCalledWith(inputData.threadId);
+    expect(commentRepositoryStub.verifyCommentExists).toBeCalledWith(inputData.commentId);
+    expect(replyRepositoryStub.addReply).toBeCalledWith(
+      expect.objectContaining({ content: inputData.content, commentId: inputData.commentId, owner: inputData.owner }),
     );
   });
 });

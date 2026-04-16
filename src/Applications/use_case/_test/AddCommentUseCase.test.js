@@ -4,34 +4,34 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('AddCommentUseCase', () => {
-  it('should orchestrate the add comment action properly', async () => {
-    const reqPayload = { content: 'sebuah comment', threadId: 'thread-123', owner: 'user-123' };
+  it('should handle the add comment process correctly', async () => {
+    const inputData = { content: 'isi komentar baru', threadId: 'thread-abc', owner: 'user-xyz' };
 
-    const expectedAddedComment = new AddedComment({
-      id: 'comment-123',
-      content: 'sebuah comment',
-      owner: 'user-123',
-    });
+    const commentRepositoryStub = new CommentRepository();
+    const threadRepositoryStub = new ThreadRepository();
 
-    const mockCommentRepository = new CommentRepository();
-    const mockThreadRepository = new ThreadRepository();
-
-    mockThreadRepository.verifyThreadExists = vi.fn().mockResolvedValue();
-    mockCommentRepository.addComment = vi.fn().mockResolvedValue(
-      new AddedComment({ id: 'comment-123', content: 'sebuah comment', owner: 'user-123' }),
+    threadRepositoryStub.verifyThreadExists = vi.fn().mockResolvedValue();
+    commentRepositoryStub.addComment = vi.fn().mockResolvedValue(
+      new AddedComment({ id: 'comment-xyz', content: 'isi komentar baru', owner: 'user-xyz' }),
     );
 
-    const addCommentUseCase = new AddCommentUseCase({
-      commentRepository: mockCommentRepository,
-      threadRepository: mockThreadRepository,
+    const useCase = new AddCommentUseCase({
+      commentRepository: commentRepositoryStub,
+      threadRepository: threadRepositoryStub,
     });
 
-    const addedComment = await addCommentUseCase.execute(reqPayload);
+    const result = await useCase.execute(inputData);
 
-    expect(addedComment).toStrictEqual(expectedAddedComment);
-    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
-    expect(mockCommentRepository.addComment).toBeCalledWith(
-      expect.objectContaining({ content: reqPayload.content, threadId: reqPayload.threadId, owner: reqPayload.owner }),
+    const commentSnapshot = new AddedComment({
+      id: 'comment-xyz',
+      content: 'isi komentar baru',
+      owner: 'user-xyz',
+    });
+
+    expect(result).toStrictEqual(commentSnapshot);
+    expect(threadRepositoryStub.verifyThreadExists).toBeCalledWith(inputData.threadId);
+    expect(commentRepositoryStub.addComment).toBeCalledWith(
+      expect.objectContaining({ content: inputData.content, threadId: inputData.threadId, owner: inputData.owner }),
     );
   });
 });

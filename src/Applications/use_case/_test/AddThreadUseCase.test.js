@@ -3,26 +3,26 @@ import AddedThread from '../../../Domains/threads/entities/AddedThread.js';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('AddThreadUseCase', () => {
-  it('should orchestrate the add thread action properly', async () => {
-    const reqPayload = { title: 'Judul Thread', body: 'Isi thread', owner: 'user-123' };
+  it('should handle the add thread process correctly', async () => {
+    const inputData = { title: 'Diskusi Baru', body: 'Isi dari diskusi baru', owner: 'user-abc' };
 
-    const expectedAddedThread = new AddedThread({
-      id: 'thread-123',
-      title: 'Judul Thread',
-      owner: 'user-123',
-    });
-
-    const mockThreadRepository = new ThreadRepository();
-    mockThreadRepository.addThread = vi.fn().mockResolvedValue(
-      new AddedThread({ id: 'thread-123', title: 'Judul Thread', owner: 'user-123' }),
+    const threadRepositoryStub = new ThreadRepository();
+    threadRepositoryStub.addThread = vi.fn().mockResolvedValue(
+      new AddedThread({ id: 'thread-xyz', title: 'Diskusi Baru', owner: 'user-abc' }),
     );
 
-    const addThreadUseCase = new AddThreadUseCase({ threadRepository: mockThreadRepository });
-    const addedThread = await addThreadUseCase.execute(reqPayload);
+    const useCase = new AddThreadUseCase({ threadRepository: threadRepositoryStub });
+    const result = await useCase.execute(inputData);
 
-    expect(addedThread).toStrictEqual(expectedAddedThread);
-    expect(mockThreadRepository.addThread).toBeCalledWith(
-      expect.objectContaining({ title: reqPayload.title, body: reqPayload.body, owner: reqPayload.owner }),
+    const threadSnapshot = new AddedThread({
+      id: 'thread-xyz',
+      title: 'Diskusi Baru',
+      owner: 'user-abc',
+    });
+
+    expect(result).toStrictEqual(threadSnapshot);
+    expect(threadRepositoryStub.addThread).toBeCalledWith(
+      expect.objectContaining({ title: inputData.title, body: inputData.body, owner: inputData.owner }),
     );
   });
 });

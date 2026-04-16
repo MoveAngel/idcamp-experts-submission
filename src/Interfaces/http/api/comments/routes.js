@@ -1,6 +1,6 @@
 import express from 'express';
 
-const createCommentsRouter = (handler) => {
+const buildCommentsRouter = (handler) => {
   const router = express.Router({ mergeParams: true });
 
   router.post('/', handler.postComment);
@@ -9,4 +9,4 @@ const createCommentsRouter = (handler) => {
   return router;
 };
 
-export default createCommentsRouter;
+export default buildCommentsRouter;

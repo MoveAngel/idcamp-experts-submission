@@ -1,7 +1,7 @@
-import repliesHandler from './handler.js';
-import createRepliesRouter from './routes.js';
+import buildRepliesHandler from './handler.js';
+import buildRepliesRouter from './routes.js';
 
 export default (container) => {
-  const handler = repliesHandler(container);
-  return createRepliesRouter(handler);
+  const handler = buildRepliesHandler(container);
+  return buildRepliesRouter(handler);
 };

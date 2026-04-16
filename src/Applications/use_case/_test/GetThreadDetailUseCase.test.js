@@ -4,95 +4,95 @@ import CommentRepository from '../../../Domains/comments/CommentRepository.js';
 import ReplyRepository from '../../../Domains/replies/ReplyRepository.js';
 
 describe('GetThreadDetailUseCase', () => {
-  it('should orchestrate the get thread detail action properly', async () => {
-    const threadId = 'thread-123';
+  it('should assemble thread detail with comments and replies correctly', async () => {
+    const targetThreadId = 'thread-abc';
 
-    const mockThread = {
-      id: threadId,
-      title: 'sebuah thread',
-      body: 'sebuah body thread',
+    const threadData = {
+      id: targetThreadId,
+      title: 'Topik Diskusi Utama',
+      body: 'Pembahasan lengkap mengenai topik ini',
       date: '2021-08-08T07:19:09.775Z',
-      username: 'dicoding',
+      username: 'budi_santoso',
     };
 
-    const mockComments = [
+    const commentList = [
       {
-        id: 'comment-_pby2_tmXV6bcvcdev8xk',
-        username: 'johndoe',
+        id: 'comment-aXq9_tnUW7abcdef01xk',
+        username: 'andi_wijaya',
         date: '2021-08-08T07:22:33.555Z',
-        content: 'sebuah comment',
+        content: 'komentar pertama pada diskusi',
         is_delete: false,
       },
       {
-        id: 'comment-_pby2_tmXV6bcvcdev9xk',
-        username: 'dicoding',
+        id: 'comment-aXq9_tnUW7abcdef02xk',
+        username: 'budi_santoso',
         date: '2021-08-08T07:26:21.338Z',
-        content: 'komentar yang dihapus',
+        content: 'isi komentar yang sudah dihapus',
         is_delete: true,
       },
     ];
 
-    const mockReplies = [
+    const replyList = [
       {
-        id: 'reply-BErOXUSefjwWGW1z101hk',
-        content: 'sebuah balasan',
+        id: 'reply-KRrOZVSBgjxYHG2a202ik',
+        content: 'tanggapan atas komentar',
         date: '2021-08-08T07:59:48.766Z',
-        username: 'johndoe',
+        username: 'andi_wijaya',
         is_delete: false,
       },
     ];
 
-    const mockThreadRepository = new ThreadRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockReplyRepository = new ReplyRepository();
+    const threadRepositoryStub = new ThreadRepository();
+    const commentRepositoryStub = new CommentRepository();
+    const replyRepositoryStub = new ReplyRepository();
 
-    mockThreadRepository.getThreadById = vi.fn().mockResolvedValue(mockThread);
-    mockCommentRepository.getCommentsByThreadId = vi.fn().mockResolvedValue(mockComments);
-    mockReplyRepository.getRepliesByCommentId = vi.fn().mockResolvedValue(mockReplies);
+    threadRepositoryStub.getThreadById = vi.fn().mockResolvedValue(threadData);
+    commentRepositoryStub.getCommentsByThreadId = vi.fn().mockResolvedValue(commentList);
+    replyRepositoryStub.getRepliesByCommentId = vi.fn().mockResolvedValue(replyList);
 
-    const getThreadDetailUseCase = new GetThreadDetailUseCase({
-      threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository,
-      replyRepository: mockReplyRepository,
+    const useCase = new GetThreadDetailUseCase({
+      threadRepository: threadRepositoryStub,
+      commentRepository: commentRepositoryStub,
+      replyRepository: replyRepositoryStub,
     });
 
-    const result = await getThreadDetailUseCase.execute(threadId);
+    const result = await useCase.execute(targetThreadId);
 
-    const expectedThread = {
-      id: 'thread-123',
-      title: 'sebuah thread',
-      body: 'sebuah body thread',
+    const snapshot = {
+      id: 'thread-abc',
+      title: 'Topik Diskusi Utama',
+      body: 'Pembahasan lengkap mengenai topik ini',
       date: '2021-08-08T07:19:09.775Z',
-      username: 'dicoding',
+      username: 'budi_santoso',
       comments: [
         {
-          id: 'comment-_pby2_tmXV6bcvcdev8xk',
-          username: 'johndoe',
+          id: 'comment-aXq9_tnUW7abcdef01xk',
+          username: 'andi_wijaya',
           date: '2021-08-08T07:22:33.555Z',
-          content: 'sebuah comment',
+          content: 'komentar pertama pada diskusi',
           is_delete: false,
           replies: [
             {
-              id: 'reply-BErOXUSefjwWGW1z101hk',
-              content: 'sebuah balasan',
+              id: 'reply-KRrOZVSBgjxYHG2a202ik',
+              content: 'tanggapan atas komentar',
               date: '2021-08-08T07:59:48.766Z',
-              username: 'johndoe',
+              username: 'andi_wijaya',
               is_delete: false,
             },
           ],
         },
         {
-          id: 'comment-_pby2_tmXV6bcvcdev9xk',
-          username: 'dicoding',
+          id: 'comment-aXq9_tnUW7abcdef02xk',
+          username: 'budi_santoso',
           date: '2021-08-08T07:26:21.338Z',
           content: '**komentar telah dihapus**',
           is_delete: true,
           replies: [
             {
-              id: 'reply-BErOXUSefjwWGW1z101hk',
-              content: 'sebuah balasan',
+              id: 'reply-KRrOZVSBgjxYHG2a202ik',
+              content: 'tanggapan atas komentar',
               date: '2021-08-08T07:59:48.766Z',
-              username: 'johndoe',
+              username: 'andi_wijaya',
               is_delete: false,
             },
           ],
@@ -100,33 +100,33 @@ describe('GetThreadDetailUseCase', () => {
       ],
     };
 
-    expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
-    expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(threadId);
-    expect(result).toStrictEqual(expectedThread);
+    expect(threadRepositoryStub.getThreadById).toBeCalledWith(targetThreadId);
+    expect(commentRepositoryStub.getCommentsByThreadId).toBeCalledWith(targetThreadId);
+    expect(result).toStrictEqual(snapshot);
   });
 
-  it('should mark deleted replies properly', async () => {
-    const threadId = 'thread-123';
+  it('should replace deleted reply content with a placeholder text', async () => {
+    const targetThreadId = 'thread-abc';
 
-    const mockThread = { id: threadId, title: 'thread', body: 'body', date: '2021-08-08', username: 'user' };
-    const mockComments = [{ id: 'comment-123', username: 'user', date: '2021-08-08', content: 'komentar', is_delete: false }];
-    const mockReplies = [{ id: 'reply-123', content: 'balasan dihapus', date: '2021-08-08', username: 'user', is_delete: true }];
+    const threadData = { id: targetThreadId, title: 'Topik Lain', body: 'isi topik', date: '2021-09-01', username: 'citra' };
+    const commentList = [{ id: 'comment-pqr', username: 'citra', date: '2021-09-01', content: 'komentar aktif', is_delete: false }];
+    const replyList = [{ id: 'reply-stu', content: 'balasan yang telah dihapus pengguna', date: '2021-09-01', username: 'citra', is_delete: true }];
 
-    const mockThreadRepository = new ThreadRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockReplyRepository = new ReplyRepository();
+    const threadRepositoryStub = new ThreadRepository();
+    const commentRepositoryStub = new CommentRepository();
+    const replyRepositoryStub = new ReplyRepository();
 
-    mockThreadRepository.getThreadById = vi.fn().mockResolvedValue(mockThread);
-    mockCommentRepository.getCommentsByThreadId = vi.fn().mockResolvedValue(mockComments);
-    mockReplyRepository.getRepliesByCommentId = vi.fn().mockResolvedValue(mockReplies);
+    threadRepositoryStub.getThreadById = vi.fn().mockResolvedValue(threadData);
+    commentRepositoryStub.getCommentsByThreadId = vi.fn().mockResolvedValue(commentList);
+    replyRepositoryStub.getRepliesByCommentId = vi.fn().mockResolvedValue(replyList);
 
-    const getThreadDetailUseCase = new GetThreadDetailUseCase({
-      threadRepository: mockThreadRepository,
-      commentRepository: mockCommentRepository,
-      replyRepository: mockReplyRepository,
+    const useCase = new GetThreadDetailUseCase({
+      threadRepository: threadRepositoryStub,
+      commentRepository: commentRepositoryStub,
+      replyRepository: replyRepositoryStub,
     });
 
-    const result = await getThreadDetailUseCase.execute(threadId);
+    const result = await useCase.execute(targetThreadId);
     expect(result.comments[0].replies[0].content).toBe('**balasan telah dihapus**');
   });
 });

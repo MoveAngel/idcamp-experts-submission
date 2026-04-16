@@ -1,7 +1,7 @@
-import threadsHandler from './handler.js';
-import createThreadsRouter from './routes.js';
+import buildThreadsHandler from './handler.js';
+import buildThreadsRouter from './routes.js';
 
 export default (container, authMiddleware) => {
-  const handler = threadsHandler(container);
-  return createThreadsRouter(handler, authMiddleware);
+  const handler = buildThreadsHandler(container);
+  return buildThreadsRouter(handler, authMiddleware);
 };

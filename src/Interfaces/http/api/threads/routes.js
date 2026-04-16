@@ -1,6 +1,6 @@
 import express from 'express';
 
-const createThreadsRouter = (handler, authMiddleware) => {
+const buildThreadsRouter = (handler, authMiddleware) => {
   const router = express.Router();
 
   router.post('/', authMiddleware, handler.postThread);
@@ -9,4 +9,4 @@ const createThreadsRouter = (handler, authMiddleware) => {
   return router;
 };
 
-export default createThreadsRouter;
+export default buildThreadsRouter;

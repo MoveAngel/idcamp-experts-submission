@@ -1,40 +1,40 @@
 import AddReplyUseCase from '../../../../Applications/use_case/AddReplyUseCase.js';
 import DeleteReplyUseCase from '../../../../Applications/use_case/DeleteReplyUseCase.js';
 
-const repliesHandler = (container) => {
-  const postReplyHandler = async (req, res, next) => {
+const buildRepliesHandler = (container) => {
+  const createReplyHandler = async (req, res, next) => {
     try {
       const { content } = req.body;
       const { threadId, commentId } = req.params;
       const { id: owner } = req.user;
 
-      const act = container.getInstance(AddReplyUseCase.name);
-      const addedReply = await act.execute({ content, commentId, threadId, owner });
+      const useCase = container.getInstance(AddReplyUseCase.name);
+      const newReply = await useCase.execute({ content, commentId, threadId, owner });
 
-      return res.status(201).json({ status: 'success', data: { addedReply } });
-    } catch (error) {
-      return next(error);
+      return res.status(201).json({ status: 'success', data: { addedReply: newReply } });
+    } catch (err) {
+      return next(err);
     }
   };
 
-  const deleteReplyHandler = async (req, res, next) => {
+  const removeReplyHandler = async (req, res, next) => {
     try {
       const { threadId, commentId, replyId } = req.params;
       const { id: owner } = req.user;
 
-      const act = container.getInstance(DeleteReplyUseCase.name);
-      await act.execute({ threadId, commentId, replyId, owner });
+      const useCase = container.getInstance(DeleteReplyUseCase.name);
+      await useCase.execute({ threadId, commentId, replyId, owner });
 
       return res.status(200).json({ status: 'success' });
-    } catch (error) {
-      return next(error);
+    } catch (err) {
+      return next(err);
     }
   };
 
   return {
-    postReply: postReplyHandler,
-    deleteReply: deleteReplyHandler,
+    postReply: createReplyHandler,
+    deleteReply: removeReplyHandler,
   };
 };
 
-export default repliesHandler;
+export default buildRepliesHandler;
