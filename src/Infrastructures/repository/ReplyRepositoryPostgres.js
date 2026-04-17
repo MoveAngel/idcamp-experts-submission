@@ -39,12 +39,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     };
 
     const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new NotFoundError('Balasan yang Anda cari tidak ada');
-    }
-
     const { owner: replyOwner } = result.rows[0];
+
     if (replyOwner !== owner) {
       throw new AuthorizationError('Akses ditolak: Anda bukan pemilik balasan ini');
     }

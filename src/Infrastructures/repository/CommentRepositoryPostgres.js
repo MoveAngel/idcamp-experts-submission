@@ -39,12 +39,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new NotFoundError('Komentar yang Anda cari tidak ada');
-    }
-
     const { owner: commentOwner } = result.rows[0];
+
     if (commentOwner !== owner) {
       throw new AuthorizationError('Akses ditolak: Anda bukan pemilik komentar ini');
     }
