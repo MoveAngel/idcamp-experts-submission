@@ -216,6 +216,16 @@ describe('HTTP server', () => {
       const response = await request(app).post('/threads').set('Authorization', `Bearer ${accessToken}`).send({ title: 'sebuah thread' });
       expect(response.status).toEqual(400);
     });
+
+    it('should response 401 when token is invalid (malformed jwt)', async () => {
+      const app = await createServer(container);
+      const response = await request(app)
+        .post('/threads')
+        .set('Authorization', 'Bearer token.tidak.valid')
+        .send({ title: 'sebuah thread', body: 'sebuah body thread' });
+      expect(response.status).toEqual(401);
+      expect(response.body.message).toEqual('Token tidak valid');
+    });
   });
 
   describe('when GET /threads/:threadId', () => {
@@ -302,6 +312,18 @@ describe('HTTP server', () => {
       const response = await request(app).post(`/threads/${threadId}/comments/${commentId}/replies`).set('Authorization', `Bearer ${accessToken}`).send({ content: 'sebuah balasan' });
       expect(response.status).toEqual(201);
       expect(response.body.data.addedReply).toBeDefined();
+    });
+
+    it('should response 404 when comment not found', async () => {
+      const app = await createServer(container);
+      const accessToken = await registerAndLogin(app);
+      const threadRes = await request(app).post('/threads').set('Authorization', `Bearer ${accessToken}`).send({ title: 't', body: 'b' });
+      const { id: threadId } = threadRes.body.data.addedThread;
+      const response = await request(app)
+        .post(`/threads/${threadId}/comments/comment-tidakada/replies`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ content: 'sebuah balasan' });
+      expect(response.status).toEqual(404);
     });
   });
 
