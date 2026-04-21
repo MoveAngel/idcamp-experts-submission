@@ -1,4 +1,4 @@
-import pool from '../../../Infrastructures/database/postgres/pool.js';
+import pool from '../../database/postgres/pool.js';
 import CommentRepositoryPostgres from '../CommentRepositoryPostgres.js';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper.js';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper.js';

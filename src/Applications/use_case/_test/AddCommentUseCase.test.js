@@ -31,7 +31,9 @@ describe('AddCommentUseCase', () => {
     expect(result).toStrictEqual(commentSnapshot);
     expect(threadRepositoryStub.verifyThreadExists).toBeCalledWith(inputData.threadId);
     expect(commentRepositoryStub.addComment).toBeCalledWith(
-      expect.objectContaining({ content: inputData.content, threadId: inputData.threadId, owner: inputData.owner }),
+      expect.objectContaining({
+        content: inputData.content, threadId: inputData.threadId, owner: inputData.owner,
+      }),
     );
   });
 });

@@ -6,7 +6,9 @@ import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('AddReplyUseCase', () => {
   it('should handle the add reply process correctly', async () => {
-    const inputData = { content: 'balasan dari pengguna', commentId: 'comment-abc', threadId: 'thread-abc', owner: 'user-xyz' };
+    const inputData = {
+      content: 'balasan dari pengguna', commentId: 'comment-abc', threadId: 'thread-abc', owner: 'user-xyz',
+    };
 
     const replyRepositoryStub = new ReplyRepository();
     const commentRepositoryStub = new CommentRepository();
@@ -36,7 +38,9 @@ describe('AddReplyUseCase', () => {
     expect(threadRepositoryStub.verifyThreadExists).toBeCalledWith(inputData.threadId);
     expect(commentRepositoryStub.verifyCommentExists).toBeCalledWith(inputData.commentId);
     expect(replyRepositoryStub.addReply).toBeCalledWith(
-      expect.objectContaining({ content: inputData.content, commentId: inputData.commentId, owner: inputData.owner }),
+      expect.objectContaining({
+        content: inputData.content, commentId: inputData.commentId, owner: inputData.owner,
+      }),
     );
   });
 });

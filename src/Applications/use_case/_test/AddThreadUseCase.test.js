@@ -22,7 +22,9 @@ describe('AddThreadUseCase', () => {
 
     expect(result).toStrictEqual(threadSnapshot);
     expect(threadRepositoryStub.addThread).toBeCalledWith(
-      expect.objectContaining({ title: inputData.title, body: inputData.body, owner: inputData.owner }),
+      expect.objectContaining({
+        title: inputData.title, body: inputData.body, owner: inputData.owner,
+      }),
     );
   });
 });

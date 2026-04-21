@@ -23,7 +23,10 @@ describe('DeleteCommentUseCase', () => {
 
     expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
     expect(mockCommentRepository.verifyCommentExists).toBeCalledWith(reqPayload.commentId);
-    expect(mockCommentRepository.verifyCommentOwner).toBeCalledWith(reqPayload.commentId, reqPayload.owner);
+    expect(mockCommentRepository.verifyCommentOwner).toBeCalledWith(
+      reqPayload.commentId,
+      reqPayload.owner,
+    );
     expect(mockCommentRepository.deleteComment).toBeCalledWith(reqPayload.commentId);
   });
 });

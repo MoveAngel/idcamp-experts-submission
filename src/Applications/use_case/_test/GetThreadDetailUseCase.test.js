@@ -108,9 +108,15 @@ describe('GetThreadDetailUseCase', () => {
   it('should replace deleted reply content with a placeholder text', async () => {
     const targetThreadId = 'thread-abc';
 
-    const threadData = { id: targetThreadId, title: 'Topik Lain', body: 'isi topik', date: '2021-09-01', username: 'citra' };
-    const commentList = [{ id: 'comment-pqr', username: 'citra', date: '2021-09-01', content: 'komentar aktif', is_delete: false }];
-    const replyList = [{ id: 'reply-stu', content: 'balasan yang telah dihapus pengguna', date: '2021-09-01', username: 'citra', is_delete: true }];
+    const threadData = {
+      id: targetThreadId, title: 'Topik Lain', body: 'isi topik', date: '2021-09-01', username: 'citra',
+    };
+    const commentList = [{
+      id: 'comment-pqr', username: 'citra', date: '2021-09-01', content: 'komentar aktif', is_delete: false,
+    }];
+    const replyList = [{
+      id: 'reply-stu', content: 'balasan yang telah dihapus pengguna', date: '2021-09-01', username: 'citra', is_delete: true,
+    }];
 
     const threadRepositoryStub = new ThreadRepository();
     const commentRepositoryStub = new CommentRepository();

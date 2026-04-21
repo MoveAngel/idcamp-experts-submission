@@ -1,6 +1,6 @@
 {
   "name": "forum-api",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "",
   "type": "module",
   "main": "index.js",
@@ -12,7 +12,8 @@
     "test:coverage": "vitest --coverage",
     "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate --envPath .test.env",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./src --fix"
   },
   "keywords": [],
   "author": "",
@@ -20,22 +21,26 @@
   "dependencies": {
     "@mapbox/node-pre-gyp": "^2.0.3",
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.4.1",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "instances-container": "^2.0.6",
     "jsonwebtoken": "^9.0.3",
-    "nanoid": "^5.1.7",
+    "nanoid": "^5.1.9",
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.5",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
-    "@vitest/coverage-v8": "^4.1.2",
-    "@vitest/eslint-plugin": "^1.6.14",
-    "eslint": "^10.2.0",
-    "eslint-config-dicodingacademy": "^0.9.5",
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/eslint-plugin": "^1.6.16",
+    "eslint": "^10.2.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^17.5.0",
     "node-pg-migrate": "^8.0.4",
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.5"
   }
 }

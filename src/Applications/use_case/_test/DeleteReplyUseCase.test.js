@@ -5,7 +5,9 @@ import ThreadRepository from '../../../Domains/threads/ThreadRepository.js';
 
 describe('DeleteReplyUseCase', () => {
   it('should orchestrate the delete reply action properly', async () => {
-    const reqPayload = { threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123', owner: 'user-123' };
+    const reqPayload = {
+      threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123', owner: 'user-123',
+    };
 
     const mockReplyRepository = new ReplyRepository();
     const mockCommentRepository = new CommentRepository();
@@ -28,7 +30,10 @@ describe('DeleteReplyUseCase', () => {
     expect(mockThreadRepository.verifyThreadExists).toBeCalledWith(reqPayload.threadId);
     expect(mockCommentRepository.verifyCommentExists).toBeCalledWith(reqPayload.commentId);
     expect(mockReplyRepository.verifyReplyExists).toBeCalledWith(reqPayload.replyId);
-    expect(mockReplyRepository.verifyReplyOwner).toBeCalledWith(reqPayload.replyId, reqPayload.owner);
+    expect(mockReplyRepository.verifyReplyOwner).toBeCalledWith(
+      reqPayload.replyId,
+      reqPayload.owner,
+    );
     expect(mockReplyRepository.deleteReply).toBeCalledWith(reqPayload.replyId);
   });
 });

@@ -24,7 +24,14 @@ const createServer = async (container) => {
   app.use('/threads/:threadId/comments', authMiddleware, commentsRouter);
   app.use('/threads/:threadId/comments/:commentId/replies', authMiddleware, repliesRouter);
 
-  app.use((err, req, res, next) => {
+  app.use((_req, res) => {
+    res.status(404).json({
+      status: 'fail',
+      message: 'Route not found',
+    });
+  });
+
+  app.use((err, _req, res, _next) => {
     const customException = DomainErrorTranslator.translate(err);
 
     if (customException instanceof ClientError) {
@@ -38,13 +45,6 @@ const createServer = async (container) => {
     return res.status(500).json({
       status: 'error',
       message: 'Terjadi kegagalan pada server',
-    });
-  });
-
-  app.use((req, res) => {
-    res.status(404).json({
-      status: 'fail',
-      message: 'Route not found',
     });
   });
 

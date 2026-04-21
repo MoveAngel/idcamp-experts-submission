@@ -2,8 +2,8 @@ import { createContainer } from 'instances-container';
 
 import { nanoid } from 'nanoid';
 import bcrypt from 'bcrypt';
-import pool from './database/postgres/pool.js';
 import jwt from 'jsonwebtoken';
+import pool from './database/postgres/pool.js';
 
 import UserRepository from '../Domains/users/UserRepository.js';
 import PasswordHash from '../Applications/security/PasswordHash.js';

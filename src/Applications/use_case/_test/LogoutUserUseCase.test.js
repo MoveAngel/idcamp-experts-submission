@@ -1,6 +1,6 @@
+import { vi } from 'vitest';
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository.js';
 import LogoutUserUseCase from '../LogoutUserUseCase.js';
-import { vi } from 'vitest';
 
 describe('LogoutUserUseCase', () => {
   it('should throw error if use case payload not contain refresh token', async () => {

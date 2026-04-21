@@ -1,4 +1,4 @@
-import pool from '../../../Infrastructures/database/postgres/pool.js';
+import pool from '../../database/postgres/pool.js';
 import ThreadRepositoryPostgres from '../ThreadRepositoryPostgres.js';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper.js';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper.js';

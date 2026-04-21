@@ -1,10 +1,10 @@
+import { vi } from 'vitest';
 import UserRepository from '../../../Domains/users/UserRepository.js';
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository.js';
 import AuthenticationTokenManager from '../../security/AuthenticationTokenManager.js';
 import PasswordHash from '../../security/PasswordHash.js';
 import LoginUserUseCase from '../LoginUserUseCase.js';
 import NewAuth from '../../../Domains/authentications/entities/NewAuth.js';
-import { vi } from 'vitest';
 
 describe('GetAuthenticationUseCase', () => {
   it('should orchestrating the get authentication action properly', async () => {

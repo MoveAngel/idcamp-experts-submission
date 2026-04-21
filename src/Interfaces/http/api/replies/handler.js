@@ -9,7 +9,9 @@ const buildRepliesHandler = (container) => {
       const { id: owner } = req.user;
 
       const useCase = container.getInstance(AddReplyUseCase.name);
-      const newReply = await useCase.execute({ content, commentId, threadId, owner });
+      const newReply = await useCase.execute({
+        content, commentId, threadId, owner,
+      });
 
       return res.status(201).json({ status: 'success', data: { addedReply: newReply } });
     } catch (err) {
@@ -23,7 +25,9 @@ const buildRepliesHandler = (container) => {
       const { id: owner } = req.user;
 
       const useCase = container.getInstance(DeleteReplyUseCase.name);
-      await useCase.execute({ threadId, commentId, replyId, owner });
+      await useCase.execute({
+        threadId, commentId, replyId, owner,
+      });
 
       return res.status(200).json({ status: 'success' });
     } catch (err) {

@@ -1,4 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import {
+  describe, expect, it, vi,
+} from 'vitest';
 import jwt from 'jsonwebtoken';
 import InvariantError from '../../../Commons/exceptions/InvariantError.js';
 import JwtTokenManager from '../JwtTokenManager.js';

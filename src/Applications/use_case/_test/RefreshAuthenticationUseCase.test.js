@@ -1,7 +1,7 @@
+import { vi } from 'vitest';
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository.js';
 import AuthenticationTokenManager from '../../security/AuthenticationTokenManager.js';
 import RefreshAuthenticationUseCase from '../RefreshAuthenticationUseCase.js';
-import { vi } from 'vitest';
 
 describe('RefreshAuthenticationUseCase', () => {
   it('should throw error if use case payload not contain refresh token', async () => {
