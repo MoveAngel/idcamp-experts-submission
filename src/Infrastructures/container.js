@@ -31,6 +31,7 @@ import DeleteCommentUseCase from '../Applications/use_case/DeleteCommentUseCase.
 import GetThreadDetailUseCase from '../Applications/use_case/GetThreadDetailUseCase.js';
 import AddReplyUseCase from '../Applications/use_case/AddReplyUseCase.js';
 import DeleteReplyUseCase from '../Applications/use_case/DeleteReplyUseCase.js';
+import ToggleLikeCommentUseCase from '../Applications/use_case/ToggleLikeCommentUseCase.js';
 
 const container = createContainer();
 
@@ -250,6 +251,17 @@ container.register([
       injectType: 'destructuring',
       dependencies: [
         { name: 'replyRepository', internal: ReplyRepository.name },
+        { name: 'commentRepository', internal: CommentRepository.name },
+        { name: 'threadRepository', internal: ThreadRepository.name },
+      ],
+    },
+  },
+  {
+    key: ToggleLikeCommentUseCase.name,
+    Class: ToggleLikeCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
         { name: 'commentRepository', internal: CommentRepository.name },
         { name: 'threadRepository', internal: ThreadRepository.name },
       ],

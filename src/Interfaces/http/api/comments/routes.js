@@ -5,6 +5,7 @@ const buildCommentsRouter = (handler) => {
 
   router.post('/', handler.postComment);
   router.delete('/:commentId', handler.deleteComment);
+  router.put('/:commentId/likes', handler.toggleLike);
 
   return router;
 };

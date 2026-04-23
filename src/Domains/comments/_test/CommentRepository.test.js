@@ -25,4 +25,9 @@ describe('CommentRepository interface', () => {
     const commentRepository = new CommentRepository();
     await expect(commentRepository.getCommentsByThreadId('thread-123')).rejects.toThrow('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
+
+  it('must result in error if invoke abstract method toggleCommentLike', async () => {
+    const commentRepository = new CommentRepository();
+    await expect(commentRepository.toggleCommentLike('comment-123', 'user-123')).rejects.toThrow('COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  });
 });

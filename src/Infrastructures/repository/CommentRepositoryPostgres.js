@@ -61,16 +61,48 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getCommentsByThreadId(threadId) {
     const query = {
-      text: `SELECT comments.id, users.username, comments.date, comments.content, comments.is_delete
+      text: `SELECT
+               comments.id,
+               users.username,
+               comments.date,
+               comments.content,
+               comments.is_delete,
+               COUNT(comment_likes.comment_id)::INTEGER AS like_count
              FROM comments
              LEFT JOIN users ON comments.owner = users.id
+             LEFT JOIN comment_likes ON comments.id = comment_likes.comment_id
              WHERE comments.thread_id = $1
+             GROUP BY comments.id, users.username
              ORDER BY comments.date ASC`,
       values: [threadId],
     };
 
     const result = await this._pool.query(query);
     return result.rows;
+  }
+
+  async toggleCommentLike(commentId, userId) {
+    const checkQuery = {
+      text: 'SELECT id FROM comment_likes WHERE comment_id = $1 AND user_id = $2',
+      values: [commentId, userId],
+    };
+
+    const existing = await this._pool.query(checkQuery);
+
+    if (existing.rowCount) {
+      const deleteQuery = {
+        text: 'DELETE FROM comment_likes WHERE comment_id = $1 AND user_id = $2',
+        values: [commentId, userId],
+      };
+      await this._pool.query(deleteQuery);
+    } else {
+      const id = `like-${this._idGenerator()}`;
+      const insertQuery = {
+        text: 'INSERT INTO comment_likes VALUES($1, $2, $3)',
+        values: [id, commentId, userId],
+      };
+      await this._pool.query(insertQuery);
+    }
   }
 }
 

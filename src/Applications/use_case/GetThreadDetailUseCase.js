@@ -12,14 +12,17 @@ class GetThreadDetailUseCase {
   async _buildCommentWithReplies(comment) {
     const replies = await this._replyRepository.getRepliesByCommentId(comment.id);
 
-    const resolvedReplies = replies.map((reply) => ({
-      ...reply,
-      content: this._resolveContent(reply.is_delete, reply.content, '**balasan telah dihapus**'),
+    const resolvedReplies = replies.map(({ is_delete: isDeleted, ...rest }) => ({
+      ...rest,
+      content: this._resolveContent(isDeleted, rest.content, '**balasan telah dihapus**'),
     }));
 
+    const { is_delete: isDeleted, like_count: likeCount, ...commentRest } = comment;
+
     return {
-      ...comment,
-      content: this._resolveContent(comment.is_delete, comment.content, '**komentar telah dihapus**'),
+      ...commentRest,
+      likeCount: likeCount ?? 0,
+      content: this._resolveContent(isDeleted, commentRest.content, '**komentar telah dihapus**'),
       replies: resolvedReplies,
     };
   }
