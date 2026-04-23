@@ -25,4 +25,4 @@ jobs:
             git pull origin v1
             npm install --omit=dev --legacy-peer-deps 
             npm run migrate up
-            pm2 restart forum-api || pm2 start npm --name "forum-api" -- run start
+            pm2 restart forum-api --update-env || pm2 start npm --name "forum-api" -- run start
