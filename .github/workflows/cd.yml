@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - v1
-      - experimental
 
 jobs:
   deploy:
@@ -21,7 +20,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/forum-api
-            git pull origin master
+            git pull origin v1
             npm ci --omit=dev --no-audit --no-fund --legacy-peer-deps
             npm run migrate up
             pm2 restart forum-api
